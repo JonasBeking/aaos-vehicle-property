@@ -1,3 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.ionic.plugins.aaosvehicleproperty">
+
+    <uses-feature android:name="android.hardware.type.automotive" android:required="true" />
+
 </manifest>

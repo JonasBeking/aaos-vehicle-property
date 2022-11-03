@@ -37,11 +37,13 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api VehiclePropertyPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api VehiclePropertyPluginInterface --output-readme README.md --output-json dist/docs.json",
+    "build-simple": "npm run clean && tsc",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "capacitor:update:after": "echo 'wtf is this'"
   },
   "devDependencies": {
     "@capacitor/android": "^4.0.0",
@@ -51,6 +53,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "eslint": "^7.11.0",
     "prettier": "~2.3.0",
     "prettier-plugin-java": "~1.0.2",
@@ -74,5 +77,9 @@
     "android": {
       "src": "android"
     }
+  },
+  "dependencies": {
+    "@capacitor-community/aaos-data-utils": "file:../aaos-data-utils",
+    "@capacitor/cli": "^4.4.0"
   }
 }

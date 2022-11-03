@@ -1,3 +1,181 @@
-export interface VehiclePropertyPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+import {RestrictedVehicleDataService, VehicleDataEvent} from "@capacitor-community/aaos-data-utils";
+
+export enum VehiclePermissions{
+    PERMISSION_CAR_CONTROL_AUDIO_VOLUME="android.car.permission.CAR_CONTROL_AUDIO_VOLUME",
+    PERMISSION_CAR_CONTROL_AUDIO_SETTINGS="android.car.permission.CAR_CONTROL_AUDIO_SETTINGS",
+    PERMISSION_SPEED="android.car.permission.CAR_SPEED",
+    PERMISSION_READ_DISPLAY_UNITS="android.car.permission.READ_CAR_DISPLAY_UNITS",
+    PERMISSION_POWERTRAIN="android.car.permission.CAR_POWERTRAIN",
+    PERMISSION_ENERGY="android.car.permission.CAR_ENERGY",
+    PERMISSION_ENERGY_PORTS="android.car.permission.CAR_ENERGY_PORTS",
+    PERMISSION_CAR_INFO="android.car.permission.CAR_INFO",
+    PERMISSION_EXTERIOR_ENVIRONMENT="android.car.permission.CAR_EXTERIOR_ENVIRONMENT",
+    PERMISSION_CAR_NAVIGATION_MANAGER="android.car.permission.CAR_NAVIGATION_MANAGER",
+    PERMISSION_CONTROL_DISPLAY_UNITS="android.car.permission.CONTROL_CAR_DISPLAY_UNITS",
+    PERMISSION_CONTROL_INTERIOR_LIGHTS="android.car.permission.CONTROL_CAR_INTERIOR_LIGHTS",
+    PERMISSION_IDENTIFICATION="android.car.permission.CAR_IDENTIFICATION",
+    PERMISSION_READ_INTERIOR_LIGHTS="android.car.permission.READ_CAR_INTERIOR_LIGHTS",
+    PERMISSION_READ_STEERING_STATE="android.car.permission.READ_CAR_STEERING",
+}
+
+export enum VehiclePropertyIds {
+    ABS_ACTIVE = 287310858,
+    AP_POWER_BOOTUP_REASON = 289409538,
+    AP_POWER_STATE_REPORT = 289475073,
+    AP_POWER_STATE_REQ = 289475072,
+    CABIN_LIGHTS_STATE = 289410817,
+    CABIN_LIGHTS_SWITCH = 289410818,
+    CRITICALLY_LOW_TIRE_PRESSURE = 392168202,
+    CURRENT_GEAR = 289408001,
+    DISPLAY_BRIGHTNESS = 289409539,
+    DISTANCE_DISPLAY_UNITS = 289408512,
+    DOOR_LOCK = 371198722,
+    DOOR_MOVE = 373295873,
+    DOOR_POS = 373295872,
+    ELECTRONIC_TOLL_COLLECTION_CARD_STATUS = 289410874,
+    ELECTRONIC_TOLL_COLLECTION_CARD_TYPE = 289410873,
+    ENGINE_COOLANT_TEMP = 291504897,
+    ENGINE_OIL_LEVEL = 289407747,
+    ENGINE_OIL_TEMP = 291504900,
+    ENGINE_RPM = 291504901,
+    ENV_OUTSIDE_TEMPERATURE = 291505923,
+    EPOCH_TIME = 290457094,
+    EV_BATTERY_DISPLAY_UNITS = 289408515,
+    EV_BATTERY_INSTANTANEOUS_CHARGE_RATE = 291504908,
+    EV_BATTERY_LEVEL = 291504905,
+    EV_CHARGE_PORT_CONNECTED = 287310603,
+    EV_CHARGE_PORT_OPEN = 287310602,
+    FOG_LIGHTS_STATE = 289410562,
+    FOG_LIGHTS_SWITCH = 289410578,
+    FUEL_CONSUMPTION_UNITS_DISTANCE_OVER_VOLUME = 287311364,
+    FUEL_DOOR_OPEN = 287310600,
+    FUEL_LEVEL = 291504903,
+    FUEL_LEVEL_LOW = 287310853,
+    FUEL_VOLUME_DISPLAY_UNITS = 289408513,
+    GEAR_SELECTION = 289408000,
+    HAZARD_LIGHTS_STATE = 289410563,
+    HAZARD_LIGHTS_SWITCH = 289410579,
+    HEADLIGHTS_STATE = 289410560,
+    HEADLIGHTS_SWITCH = 289410576,
+    HIGH_BEAM_LIGHTS_STATE = 289410561,
+    HIGH_BEAM_LIGHTS_SWITCH = 289410577,
+    HVAC_ACTUAL_FAN_SPEED_RPM = 356517135,
+    HVAC_AC_ON = 354419973,
+    HVAC_AUTO_ON = 354419978,
+    HVAC_AUTO_RECIRC_ON = 354419986,
+    HVAC_DEFROSTER = 320865540,
+    HVAC_DUAL_ON = 354419977,
+    HVAC_FAN_DIRECTION = 356517121,
+    HVAC_FAN_DIRECTION_AVAILABLE = 356582673,
+    HVAC_FAN_SPEED = 356517120,
+    HVAC_MAX_AC_ON = 354419974,
+    HVAC_MAX_DEFROST_ON = 354419975,
+    HVAC_POWER_ON = 354419984,
+    HVAC_RECIRC_ON = 354419976,
+    HVAC_SEAT_TEMPERATURE = 356517131,
+    HVAC_SEAT_VENTILATION = 356517139,
+    HVAC_SIDE_MIRROR_HEAT = 339739916,
+    HVAC_STEERING_WHEEL_HEAT = 289408269,
+    HVAC_TEMPERATURE_CURRENT = 358614274,
+    HVAC_TEMPERATURE_DISPLAY_UNITS = 289408270,
+    HVAC_TEMPERATURE_SET = 358614275,
+    HVAC_TEMPERATURE_VALUE_SUGGESTION = 291570965,
+    HW_KEY_INPUT = 289475088,
+    IGNITION_STATE = 289408009,
+    INFO_DRIVER_SEAT = 356516106,
+    INFO_EV_BATTERY_CAPACITY = 291504390,
+    INFO_EV_CONNECTOR_TYPE = 289472775,
+    INFO_EV_PORT_LOCATION = 289407241,
+    INFO_EXTERIOR_DIMENSIONS = 289472779,
+    INFO_FUEL_CAPACITY = 291504388,
+    INFO_FUEL_DOOR_LOCATION = 289407240,
+    INFO_FUEL_TYPE = 289472773,
+    INFO_MAKE = 286261505,
+    INFO_MODEL = 286261506,
+    INFO_MODEL_YEAR = 289407235,
+    INFO_MULTI_EV_PORT_LOCATIONS = 289472780,
+    INFO_VIN = 286261504,
+    INVALID = 0,
+    MIRROR_FOLD = 287312709,
+    MIRROR_LOCK = 287312708,
+    MIRROR_Y_MOVE = 339741507,
+    MIRROR_Y_POS = 339741506,
+    MIRROR_Z_MOVE = 339741505,
+    MIRROR_Z_POS = 339741504,
+    NIGHT_MODE = 287310855,
+    OBD2_FREEZE_FRAME = 299896065,
+    OBD2_FREEZE_FRAME_CLEAR = 299896067,
+    OBD2_FREEZE_FRAME_INFO = 299896066,
+    OBD2_LIVE_FRAME = 299896064,
+    PARKING_BRAKE_AUTO_APPLY = 287310851,
+    PARKING_BRAKE_ON = 287310850,
+    PERF_ODOMETER = 291504644,
+    PERF_REAR_STEERING_ANGLE = 291504656,
+    PERF_STEERING_ANGLE = 291504649,
+    PERF_VEHICLE_SPEED = 291504647,
+    PERF_VEHICLE_SPEED_DISPLAY = 291504648,
+    RANGE_REMAINING = 291504904,
+    READING_LIGHTS_STATE = 356519683,
+    READING_LIGHTS_SWITCH = 356519684,
+    TIRE_PRESSURE_DISPLAY_UNITS = 289408514,
+    TRACTION_CONTROL_ACTIVE = 287310859,
+    TURN_SIGNAL_STATE = 289408008,
+    VEHICLE_MAP_SERVICE = 299895808,
+    WHEEL_TICK = 290521862,
+    WINDOW_LOCK = 320867268,
+    WINDOW_MOVE = 322964417,
+    WINDOW_POS = 322964416,
+}
+
+
+type VehiclePropertyToPermissionMapType = {
+    [key: number] : string
+}
+
+const VehiclePropertyToPermissionMap : VehiclePropertyToPermissionMapType = {
+
+}
+
+VehiclePropertyToPermissionMap[VehiclePropertyIds.CABIN_LIGHTS_STATE] = VehiclePermissions.PERMISSION_READ_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.CABIN_LIGHTS_SWITCH] = VehiclePermissions.PERMISSION_CONTROL_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.DISTANCE_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.ENV_OUTSIDE_TEMPERATURE] = VehiclePermissions.PERMISSION_EXTERIOR_ENVIRONMENT;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_BATTERY_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_BATTERY_INSTANTANEOUS_CHARGE_RATE] = VehiclePermissions.PERMISSION_ENERGY;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_BATTERY_LEVEL] = VehiclePermissions.PERMISSION_ENERGY;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_CHARGE_PORT_CONNECTED] = VehiclePermissions.PERMISSION_ENERGY_PORTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_CHARGE_PORT_OPEN] = VehiclePermissions.PERMISSION_ENERGY_PORTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_CONSUMPTION_UNITS_DISTANCE_OVER_VOLUME] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_DOOR_OPEN] = VehiclePermissions.PERMISSION_ENERGY_PORTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_LEVEL] = VehiclePermissions.PERMISSION_ENERGY;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_VOLUME_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.IGNITION_STATE] = VehiclePermissions.PERMISSION_POWERTRAIN;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_DRIVER_SEAT] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_FUEL_CAPACITY] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_FUEL_TYPE] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_MAKE] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_MODEL] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_VIN] = VehiclePermissions.PERMISSION_IDENTIFICATION;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.NIGHT_MODE] = VehiclePermissions.PERMISSION_EXTERIOR_ENVIRONMENT;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.PERF_VEHICLE_SPEED] = VehiclePermissions.PERMISSION_SPEED;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.READING_LIGHTS_STATE] = VehiclePermissions.PERMISSION_READ_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.READING_LIGHTS_SWITCH] = VehiclePermissions.PERMISSION_CONTROL_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.TIRE_PRESSURE_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.WHEEL_TICK] = VehiclePermissions.PERMISSION_SPEED;
+
+export default VehiclePropertyToPermissionMap
+
+export interface VehiclePropertyDataEvent extends VehicleDataEvent{
+    data : {propertyId : number,value? : any}
+}
+
+export interface VehiclePropertyPluginInterface extends RestrictedVehicleDataService<VehiclePropertyDataEvent,VehiclePermissions>{
+    /**
+     * Gets the raw values without utilizing a DataView to container possibly background-generated data and therefore getting an
+     * immidiate response with the current value(s)
+     * @param options The id of the vehicle property to view
+     */
+    quickView(options : {
+        dataId : number
+    }) : Promise<VehiclePropertyDataEvent>
 }
