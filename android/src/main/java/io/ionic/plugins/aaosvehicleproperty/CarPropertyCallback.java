@@ -1,4 +1,4 @@
-package io.ionic.plugins.aaosvehicleproperty.carproperty;
+package io.ionic.plugins.aaosvehicleproperty;
 
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.property.CarPropertyManager;
@@ -6,7 +6,7 @@ import android.util.Log;
 
 import io.ionic.plugins.aaosdatautils.datacallback.DataCallback;
 import io.ionic.plugins.aaosdatautils.datacallback.DataCallbackBuilder;
-import io.ionic.plugins.aaosdatautils.dataevent.ErrorEvent;
+import io.ionic.plugins.aaosdatautils.dataevent.DataErrorEvent;
 import io.ionic.plugins.aaosdatautils.dataview.DataView;
 
 public class CarPropertyCallback implements DataCallback<CarPropertyCallback>, CarPropertyManager.CarPropertyEventCallback {
@@ -26,14 +26,14 @@ public class CarPropertyCallback implements DataCallback<CarPropertyCallback>, C
     @Override
     public void onChangeEvent(CarPropertyValue carPropertyValue) {
         Log.d(TAG,"Received changed value: " + carPropertyValue.getValue() + " for property: " + carPropertyValue.getPropertyId());
-        CarDataEvent carDataEvent = new CarDataEvent("change",carPropertyValue);
+        CarDataEvent carDataEvent = new CarDataEvent(CarDataEvent.Name.CHANGE,carPropertyValue);
         passDataToView(carDataEvent);
     }
 
     @Override
     public void onErrorEvent(int propertyId, int zone) {
         Log.w(TAG, "Received error car property event, propId=" + propertyId);
-        ErrorEvent errorEvent = new ErrorEvent("unknown");
+        DataErrorEvent errorEvent = new DataErrorEvent("unknown");
         passDataToView(errorEvent);
     }
 

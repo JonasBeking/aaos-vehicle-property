@@ -1,6 +1,5 @@
-package io.ionic.plugins.aaosvehicleproperty.carproperty;
+package io.ionic.plugins.aaosvehicleproperty;
 
-import android.car.Car;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
@@ -8,73 +7,10 @@ import com.getcapacitor.annotation.Permission;
 
 import io.ionic.plugins.aaosdatautils.DataPlugin;
 import io.ionic.plugins.aaosdatautils.dataerror.MissingPluginCallArgumentException;
+import io.ionic.plugins.aaosdatautils.datapermissions.AutomotiveData;
 
-
-@CapacitorPlugin(
-        name = "VehiclePropertyPlugin",
-        permissions = {
-                @Permission(
-                        strings = {Car.PERMISSION_SPEED},
-                        alias = Car.PERMISSION_SPEED
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_CAR_CONTROL_AUDIO_VOLUME},
-                        alias = Car.PERMISSION_CAR_CONTROL_AUDIO_VOLUME
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_CAR_CONTROL_AUDIO_SETTINGS},
-                        alias = Car.PERMISSION_CAR_CONTROL_AUDIO_SETTINGS
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_READ_DISPLAY_UNITS},
-                        alias = Car.PERMISSION_READ_DISPLAY_UNITS
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_POWERTRAIN},
-                        alias = Car.PERMISSION_POWERTRAIN
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_ENERGY},
-                        alias = Car.PERMISSION_ENERGY
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_ENERGY_PORTS},
-                        alias = Car.PERMISSION_ENERGY_PORTS
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_CAR_INFO},
-                        alias = Car.PERMISSION_CAR_INFO
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_EXTERIOR_ENVIRONMENT},
-                        alias = Car.PERMISSION_EXTERIOR_ENVIRONMENT
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_CAR_NAVIGATION_MANAGER},
-                        alias = Car.PERMISSION_CAR_NAVIGATION_MANAGER
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_CONTROL_DISPLAY_UNITS},
-                        alias = Car.PERMISSION_CONTROL_DISPLAY_UNITS
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_CONTROL_INTERIOR_LIGHTS},
-                        alias = Car.PERMISSION_CONTROL_INTERIOR_LIGHTS
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_IDENTIFICATION},
-                        alias = Car.PERMISSION_IDENTIFICATION
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_READ_INTERIOR_LIGHTS},
-                        alias = Car.PERMISSION_READ_INTERIOR_LIGHTS
-                ),
-                @Permission(
-                        strings = {Car.PERMISSION_READ_STEERING_STATE},
-                        alias = Car.PERMISSION_READ_STEERING_STATE
-                ),
-        }
-)
+@AutomotiveData(allowedIds = {291504647,289410817,289408001})
+@CapacitorPlugin(name = "VehiclePropertyPlugin",permissions = {@Permission(strings = {"android.car.permission.CAR_SPEED"},alias = "android.car.permission.CAR_SPEED"),@Permission(strings = {"android.car.permission.READ_CAR_INTERIOR_LIGHTS"},alias = "android.car.permission.READ_CAR_INTERIOR_LIGHTS"),@Permission(strings = {"android.car.permission.CAR_POWERTRAIN"},alias = "android.car.permission.CAR_POWERTRAIN")})
 public class VehiclePropertyPlugin extends DataPlugin<CarPropertyCallback> {
 
     @Override
@@ -82,24 +18,6 @@ public class VehiclePropertyPlugin extends DataPlugin<CarPropertyCallback> {
         this.dataViewManager = new CarPropertyViewManager(super.getContext());
         this.dataErrorHandler = new CarDataErrorHandler();
         super.load();
-        this.processingChain.add(pluginCall -> {
-            if(pluginCall.hasOption("dataId")) {
-                Integer dataId = pluginCall.getInt("dataId");
-                if(dataId == null) {
-                    return;
-                }
-                return;
-                //String [] allowedVehicleProperties = this.getConfig().getArray("allowedVehicleProperties");
-
-                //for(String property : allowedVehicleProperties) {
-                //    if(Integer.valueOf(property).equals(dataId)) {
-                //        return;
-                //    }
-                //}
-                //throw new IllegalPropertyAccessException(dataId);
-
-            }
-        });
     }
 
     @PluginMethod()

@@ -1,4 +1,4 @@
-package io.ionic.plugins.aaosvehicleproperty.carproperty;
+package io.ionic.plugins.aaosvehicleproperty;
 
 import android.car.hardware.property.CarInternalErrorException;
 import android.car.hardware.property.PropertyNotAvailableAndRetryException;

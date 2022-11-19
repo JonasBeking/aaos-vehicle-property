@@ -1,6 +1,8 @@
+import type { VehicleErrorEvent} from "@capacitor-community/aaos-data-utils";
+import {RestrictedVehicleDataProxy} from "@capacitor-community/aaos-data-utils";
 import {registerPlugin} from "@capacitor/core";
-import {VehiclePermissions, VehiclePropertyDataEvent, VehiclePropertyPluginInterface} from "./definitions";
-import {RestrictedVehicleDataProxy, VehicleErrorEvent} from "@capacitor-community/aaos-data-utils";
+
+import type {VehiclePermissions, VehiclePropertyDataEvent, VehiclePropertyPluginInterface} from "./definitions";
 
 
 const VehiclePropertyService = registerPlugin<VehiclePropertyPluginInterface>('VehiclePropertyPlugin')
@@ -8,7 +10,7 @@ const VehiclePropertyService = registerPlugin<VehiclePropertyPluginInterface>('V
 /**
  * Used for breaking up packed function arguments, automotic and central logging for calls and maybe central error handling
  */
-export class VehiclePropertyPlugin extends RestrictedVehicleDataProxy<VehiclePropertyDataEvent,VehiclePermissions> {
+export class VehiclePropertyPlugin extends RestrictedVehicleDataProxy<VehiclePropertyDataEvent,VehicleErrorEvent,VehiclePermissions> {
 
     constructor() {
         super(VehiclePropertyService);
@@ -27,4 +29,4 @@ export class VehiclePropertyPlugin extends RestrictedVehicleDataProxy<VehiclePro
 }
 
 export * from "./definitions"
-//export * from "./configuration"
+export * from "./configuration"

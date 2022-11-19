@@ -8,7 +8,8 @@ export default {
       format: 'iife',
       name: 'capacitorVehicleProperty',
       globals: {
-        '@capacitor/core': 'capacitorExports'
+        '@capacitor/core': 'capacitorExports',
+        '@trapezedev/project' : 'trapezeExports'
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -21,5 +22,5 @@ export default {
     },
   ],
   plugins :[nodeResolve()],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core','@trapezedev/project'],
 };

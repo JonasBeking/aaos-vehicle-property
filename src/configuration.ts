@@ -1,30 +1,86 @@
-import VehiclePropertyToPermissionMap, {VehiclePropertyIds} from "./definitions";
-import {VehiclePluginConfiguration} from "@capacitor-community/aaos-data-utils";
 
+import type {AutomotiveCapacitorConfig} from "@capacitor-community/aaos-data-utils";
+import {
+    ApplicationFeature, ApplicationPermission,
+    AutomotiveDataPluginConfiguration, ConfigurationError,
+} from "@capacitor-community/aaos-data-utils";
 
-export interface VehiclePropertyPluginConfiguration {
-    allowedVehicleProperties : Array<VehiclePropertyIds>
+import {VehiclePermissions, VehiclePropertyIds} from "./definitions";
+
+type VehiclePropertyToPermissionMapType = {
+    [key: number] : string
 }
 
-export class VehiclePropertyConfig extends VehiclePluginConfiguration{
 
-    private readonly allowedVehicleProperties: Array<VehiclePropertyIds>;
+const VehiclePropertyToPermissionMap : VehiclePropertyToPermissionMapType = {
 
-    constructor(pluginConfiguration : VehiclePropertyPluginConfiguration) {
-        super('carproperty/VehiclePropertyPlugin.java');
-        this.allowedVehicleProperties = pluginConfiguration.allowedVehicleProperties
-        this.permissionUtil.setPermissions(this.getPermissions())
+}
+
+VehiclePropertyToPermissionMap[VehiclePropertyIds.CABIN_LIGHTS_STATE] = VehiclePermissions.PERMISSION_READ_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.CABIN_LIGHTS_SWITCH] = VehiclePermissions.PERMISSION_CONTROL_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.CURRENT_GEAR] = VehiclePermissions.PERMISSION_POWERTRAIN
+VehiclePropertyToPermissionMap[VehiclePropertyIds.DISTANCE_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.ENV_OUTSIDE_TEMPERATURE] = VehiclePermissions.PERMISSION_EXTERIOR_ENVIRONMENT;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_BATTERY_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_BATTERY_INSTANTANEOUS_CHARGE_RATE] = VehiclePermissions.PERMISSION_ENERGY;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_BATTERY_LEVEL] = VehiclePermissions.PERMISSION_ENERGY;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_CHARGE_PORT_CONNECTED] = VehiclePermissions.PERMISSION_ENERGY_PORTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.EV_CHARGE_PORT_OPEN] = VehiclePermissions.PERMISSION_ENERGY_PORTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_CONSUMPTION_UNITS_DISTANCE_OVER_VOLUME] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_DOOR_OPEN] = VehiclePermissions.PERMISSION_ENERGY_PORTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_LEVEL] = VehiclePermissions.PERMISSION_ENERGY;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.FUEL_VOLUME_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.IGNITION_STATE] = VehiclePermissions.PERMISSION_POWERTRAIN;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_DRIVER_SEAT] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_FUEL_CAPACITY] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_FUEL_TYPE] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_MAKE] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_MODEL] = VehiclePermissions.PERMISSION_CAR_INFO;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.INFO_VIN] = VehiclePermissions.PERMISSION_IDENTIFICATION;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.NIGHT_MODE] = VehiclePermissions.PERMISSION_EXTERIOR_ENVIRONMENT;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.PERF_VEHICLE_SPEED] = VehiclePermissions.PERMISSION_SPEED;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.READING_LIGHTS_STATE] = VehiclePermissions.PERMISSION_READ_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.READING_LIGHTS_SWITCH] = VehiclePermissions.PERMISSION_CONTROL_INTERIOR_LIGHTS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.TIRE_PRESSURE_DISPLAY_UNITS] = VehiclePermissions.PERMISSION_READ_DISPLAY_UNITS;
+VehiclePropertyToPermissionMap[VehiclePropertyIds.WHEEL_TICK] = VehiclePermissions.PERMISSION_SPEED;
+
+
+export class VehiclePropertyPluginConfiguration extends AutomotiveDataPluginConfiguration{
+
+    name = "VehiclePropertyPlugin"
+    package = "@capacitor-community/aaos-vehicle-property"
+    javaPackage = "io.ionic.plugins.aaosvehicleproperty"
+    minCarApiLevel = 4
+
+    constructor(automotiveCapacitorConfig : AutomotiveCapacitorConfig) {
+        super(automotiveCapacitorConfig)
+        const pluginConfig =  automotiveCapacitorConfig.plugins.VehiclePropertyPlugin
+        if(!pluginConfig) {
+            throw new ConfigurationError("AutomotiveCapacitorConfig is unexpectedly missing the VehiclePropertyPlugin property")
+        }
+        this.addAllowedDataIds(pluginConfig.allowedVehicleProperties)
     }
 
-    protected getPermissions(): Set<string> {
-        let permissions = new Set<string>()
-        for(let vehicleProperty of this.allowedVehicleProperties) {
-            permissions.add(VehiclePropertyToPermissionMap[vehicleProperty])
+    addAllowedDataIds(allowedDataIds: number[]) : VehiclePropertyPluginConfiguration {
+        return super.addAllowedDataIds(allowedDataIds) as VehiclePropertyPluginConfiguration;
+    }
+
+    getRequiredPermissions(): Set<ApplicationPermission> {
+        const permissions = new Set<ApplicationPermission>()
+        for(const vehicleProperty of this.getAllowedDataIds()) {
+            const permissionString : string = VehiclePropertyToPermissionMap[vehicleProperty]
+            if(permissionString) {
+                permissions.add(new ApplicationPermission(permissionString))
+            }
         }
         return permissions
     }
 
-    apply() : void {
-        this.permissionUtil.adjustPermissionAnnotation()
+    getRequiredFeatures(): Set<ApplicationFeature> {
+        const features = new Set<ApplicationFeature>()
+        features.add(new ApplicationFeature("android.hardware.type.automotive",true))
+        return features
     }
 }
+
+

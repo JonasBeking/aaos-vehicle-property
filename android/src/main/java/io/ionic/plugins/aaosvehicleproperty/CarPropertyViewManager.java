@@ -1,4 +1,4 @@
-package io.ionic.plugins.aaosvehicleproperty.carproperty;
+package io.ionic.plugins.aaosvehicleproperty;
 
 import android.car.Car;
 import android.car.VehicleAreaType;
@@ -24,8 +24,8 @@ public class CarPropertyViewManager extends DataViewManager<CarPropertyCallback>
     }
 
     @Override
-    public DataView<CarPropertyCallback> generate(PluginCall pluginCall, Integer dataId, String addressableName, Boolean isActive, Boolean overwriteOldEvents) {
-        DataView<CarPropertyCallback> dataView = super.generate(pluginCall,dataId,addressableName,isActive,overwriteOldEvents);
+    public DataView<CarPropertyCallback> generate(PluginCall pluginCall, Integer dataId, String addressableName, Boolean isActive) {
+        DataView<CarPropertyCallback> dataView = super.generate(pluginCall,dataId,addressableName,isActive);
         boolean successfullyRegistered = carPropertyManager.registerCallback(dataView.getCallback(),dataId,CarPropertyManager.SENSOR_RATE_ONCHANGE);
         if(!successfullyRegistered) {
             throw new DataViewRegisterException(dataId);
@@ -41,7 +41,7 @@ public class CarPropertyViewManager extends DataViewManager<CarPropertyCallback>
     }
     public CarDataEvent quickView(Integer dataId) {
         CarPropertyValue carPropertyValue = carPropertyManager.getProperty(dataId,VehicleAreaType.VEHICLE_AREA_TYPE_GLOBAL);
-        return new CarDataEvent("view",carPropertyValue);
+        return new CarDataEvent(CarDataEvent.Name.VIEW,carPropertyValue);
     }
 
 }

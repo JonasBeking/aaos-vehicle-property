@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://ionic.io.git"
+    "url": "git+https://github.com/JonasBeking/aaos-vehicle-property.git"
   },
   "bugs": {
-    "url": "https://ionic.io/issues"
+    "url": "https://github.com/JonasBeking/aaos-vehicle-property/issues"
   },
   "keywords": [
     "capacitor",
@@ -80,6 +80,7 @@
   },
   "dependencies": {
     "@capacitor-community/aaos-data-utils": "file:../aaos-data-utils",
-    "@capacitor/cli": "^4.4.0"
+    "@capacitor/cli": "^4.4.0",
+    "@trapezedev/project": "^6.0.0"
   }
 }
