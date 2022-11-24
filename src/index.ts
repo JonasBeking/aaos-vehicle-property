@@ -1,3 +1,4 @@
+
 import type { VehicleErrorEvent} from "@capacitor-community/aaos-data-utils";
 import {RestrictedVehicleDataProxy} from "@capacitor-community/aaos-data-utils";
 import {registerPlugin} from "@capacitor/core";
@@ -29,4 +30,3 @@ export class VehiclePropertyPlugin extends RestrictedVehicleDataProxy<VehiclePro
 }
 
 export * from "./definitions"
-export * from "./configuration"
