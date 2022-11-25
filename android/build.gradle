@@ -51,7 +51,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation files('C:/Users/gjunj/AppData/Local/Android/Sdk/platforms/android-32/optional/android.car.jar')
+    implementation files('/Users/jonasbeking/Library/Android/sdk/platforms/android-32/optional/android.car.jar')
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation project(':capacitor-community-aaos-data-utils')

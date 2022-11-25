@@ -9,8 +9,8 @@ import io.ionic.plugins.aaosdatautils.DataPlugin;
 import io.ionic.plugins.aaosdatautils.dataerror.MissingPluginCallArgumentException;
 import io.ionic.plugins.aaosdatautils.datapermissions.AutomotiveData;
 
-@AutomotiveData(allowedIds = {291504647,289410817})
-@CapacitorPlugin(name = "VehiclePropertyPlugin",permissions = {@Permission(strings = {"android.car.permission.CAR_SPEED"},alias = "android.car.permission.CAR_SPEED"),@Permission(strings = {"android.car.permission.READ_CAR_INTERIOR_LIGHTS"},alias = "android.car.permission.READ_CAR_INTERIOR_LIGHTS")})
+@AutomotiveData(allowedIds = {291504647,291504649})
+@CapacitorPlugin(name = "VehiclePropertyPlugin",permissions = {@Permission(strings = {"android.car.permission.CAR_SPEED"},alias = "android.car.permission.CAR_SPEED"),@Permission(strings = {"android.car.permission.READ_CAR_STEERING"},alias = "android.car.permission.READ_CAR_STEERING")})
 public class VehiclePropertyPlugin extends DataPlugin<CarPropertyCallback> {
 
     @Override

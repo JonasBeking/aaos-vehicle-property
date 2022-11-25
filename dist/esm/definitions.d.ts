@@ -1,25 +1,23 @@
-import type {RestrictedVehicleDataService, VehicleDataEvent, VehicleErrorEvent} from "@capacitor-community/aaos-data-utils";
-
-export enum VehiclePermissions{
-    PERMISSION_CAR_CONTROL_AUDIO_VOLUME="android.car.permission.CAR_CONTROL_AUDIO_VOLUME",
-    PERMISSION_CAR_CONTROL_AUDIO_SETTINGS="android.car.permission.CAR_CONTROL_AUDIO_SETTINGS",
-    PERMISSION_SPEED="android.car.permission.CAR_SPEED",
-    PERMISSION_READ_DISPLAY_UNITS="android.car.permission.READ_CAR_DISPLAY_UNITS",
-    PERMISSION_POWERTRAIN="android.car.permission.CAR_POWERTRAIN",
-    PERMISSION_ENERGY="android.car.permission.CAR_ENERGY",
-    PERMISSION_ENERGY_PORTS="android.car.permission.CAR_ENERGY_PORTS",
-    PERMISSION_CAR_INFO="android.car.permission.CAR_INFO",
-    PERMISSION_EXTERIOR_ENVIRONMENT="android.car.permission.CAR_EXTERIOR_ENVIRONMENT",
-    PERMISSION_CAR_NAVIGATION_MANAGER="android.car.permission.CAR_NAVIGATION_MANAGER",
-    PERMISSION_CONTROL_DISPLAY_UNITS="android.car.permission.CONTROL_CAR_DISPLAY_UNITS",
-    PERMISSION_CONTROL_INTERIOR_LIGHTS="android.car.permission.CONTROL_CAR_INTERIOR_LIGHTS",
-    PERMISSION_IDENTIFICATION="android.car.permission.CAR_IDENTIFICATION",
-    PERMISSION_READ_INTERIOR_LIGHTS="android.car.permission.READ_CAR_INTERIOR_LIGHTS",
-    PERMISSION_READ_STEERING_STATE="android.car.permission.READ_CAR_STEERING",
-    PERMISSION_CONTROL_CAR_CLIMATE="android.car.Car.PERMISSION_CONTROL_CAR_CLIMATE"
+import type { RestrictedVehicleDataService, VehicleDataEvent, VehicleErrorEvent } from "@capacitor-community/aaos-data-utils";
+export declare enum VehiclePermissions {
+    PERMISSION_CAR_CONTROL_AUDIO_VOLUME = "android.car.permission.CAR_CONTROL_AUDIO_VOLUME",
+    PERMISSION_CAR_CONTROL_AUDIO_SETTINGS = "android.car.permission.CAR_CONTROL_AUDIO_SETTINGS",
+    PERMISSION_SPEED = "android.car.permission.CAR_SPEED",
+    PERMISSION_READ_DISPLAY_UNITS = "android.car.permission.READ_CAR_DISPLAY_UNITS",
+    PERMISSION_POWERTRAIN = "android.car.permission.CAR_POWERTRAIN",
+    PERMISSION_ENERGY = "android.car.permission.CAR_ENERGY",
+    PERMISSION_ENERGY_PORTS = "android.car.permission.CAR_ENERGY_PORTS",
+    PERMISSION_CAR_INFO = "android.car.permission.CAR_INFO",
+    PERMISSION_EXTERIOR_ENVIRONMENT = "android.car.permission.CAR_EXTERIOR_ENVIRONMENT",
+    PERMISSION_CAR_NAVIGATION_MANAGER = "android.car.permission.CAR_NAVIGATION_MANAGER",
+    PERMISSION_CONTROL_DISPLAY_UNITS = "android.car.permission.CONTROL_CAR_DISPLAY_UNITS",
+    PERMISSION_CONTROL_INTERIOR_LIGHTS = "android.car.permission.CONTROL_CAR_INTERIOR_LIGHTS",
+    PERMISSION_IDENTIFICATION = "android.car.permission.CAR_IDENTIFICATION",
+    PERMISSION_READ_INTERIOR_LIGHTS = "android.car.permission.READ_CAR_INTERIOR_LIGHTS",
+    PERMISSION_READ_STEERING_STATE = "android.car.permission.READ_CAR_STEERING",
+    PERMISSION_CONTROL_CAR_CLIMATE = "android.car.Car.PERMISSION_CONTROL_CAR_CLIMATE"
 }
-
-export enum VehiclePropertyIds {
+export declare enum VehiclePropertyIds {
     ABS_ACTIVE = 287310858,
     AP_POWER_BOOTUP_REASON = 289409538,
     AP_POWER_STATE_REPORT = 289475073,
@@ -125,24 +123,21 @@ export enum VehiclePropertyIds {
     WHEEL_TICK = 290521862,
     WINDOW_LOCK = 320867268,
     WINDOW_MOVE = 322964417,
-    WINDOW_POS = 322964416,
+    WINDOW_POS = 322964416
 }
-
-
-
-
-
-export interface VehiclePropertyDataEvent extends VehicleDataEvent{
-    data : {propertyId : number,value? : any}
+export interface VehiclePropertyDataEvent extends VehicleDataEvent {
+    data: {
+        propertyId: number;
+        value?: any;
+    };
 }
-
-export interface VehiclePropertyPluginInterface extends RestrictedVehicleDataService<VehiclePropertyDataEvent,VehicleErrorEvent,VehiclePermissions>{
+export interface VehiclePropertyPluginInterface extends RestrictedVehicleDataService<VehiclePropertyDataEvent, VehicleErrorEvent, VehiclePermissions> {
     /**
      * Gets the raw values without utilizing a DataView to container possibly background-generated data and therefore getting an
      * immidiate response with the current value(s)
      * @param options The id of the vehicle property to view
      */
-    quickView(options : {
-        dataId : number
-    }) : Promise<VehiclePropertyDataEvent>
+    quickView(options: {
+        dataId: number;
+    }): Promise<VehiclePropertyDataEvent>;
 }

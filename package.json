@@ -71,15 +71,12 @@
     "extends": "@ionic/eslint-config/recommended"
   },
   "capacitor": {
-    "ios": {
-      "src": "ios"
-    },
     "android": {
       "src": "android"
     }
   },
   "dependencies": {
-    "@capacitor-community/aaos-data-utils": "file:../aaos-data-utils",
+    "@capacitor-community/aaos-data-utils": "github:JonasBeking/aaos-data-utils",
     "@capacitor/cli": "^4.4.0",
     "@trapezedev/project": "^6.0.0"
   }

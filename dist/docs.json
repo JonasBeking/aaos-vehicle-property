@@ -1,0 +1,55 @@
+{
+  "api": {
+    "name": "VehiclePropertyPluginInterface",
+    "slug": "vehiclepropertyplugininterface",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "quickView",
+        "signature": "(options: { dataId: number; }) => Promise<VehiclePropertyDataEvent>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "The id of the vehicle property to view",
+            "type": "{ dataId: number; }"
+          }
+        ],
+        "returns": "Promise<VehiclePropertyDataEvent>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "options The id of the vehicle property to view"
+          }
+        ],
+        "docs": "Gets the raw values without utilizing a DataView to container possibly background-generated data and therefore getting an\nimmidiate response with the current value(s)",
+        "complexTypes": [
+          "VehiclePropertyDataEvent"
+        ],
+        "slug": "quickview"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "VehiclePropertyDataEvent",
+      "slug": "vehiclepropertydataevent",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "data",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "{ propertyId: number; value?: any; }"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}
