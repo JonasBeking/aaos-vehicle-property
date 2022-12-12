@@ -10,11 +10,20 @@ export class VehiclePropertyPlugin extends RestrictedVehicleDataProxy {
     }
     quickView(dataId) {
         return this.dataService.quickView({ dataId: dataId }).then(carPropertyDataEvent => {
-            console.log(`Received value: ${JSON.stringify(carPropertyDataEvent)} for ${dataId}`);
+            console.debug(`Received value: ${JSON.stringify(carPropertyDataEvent, null, 3)} for ${dataId}`);
             return carPropertyDataEvent;
         }).catch(errorEvent => {
-            console.error(`Failed receiving value for ${dataId}. Reason ${errorEvent}`);
-            throw JSON.parse(errorEvent);
+            let throwable;
+            let log = errorEvent;
+            try {
+                throwable = JSON.parse(errorEvent);
+                log = JSON.stringify(throwable, null, 3);
+            }
+            catch (e) {
+                throwable = errorEvent;
+            }
+            console.error(`Failed receiving value for ${dataId}. Reason ${log}`);
+            throw throwable;
         });
     }
 }
